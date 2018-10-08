@@ -1,8 +1,8 @@
 <template>
     <div>        
         <div>
-            <label v-bind:for="name">{{ name }}</label>
-            <input id="text-input" type="text" v-bind:name="name" v-model="textContent">
+            <label v-bind:for="name">{{ info.label }}</label>
+            <input id="text-input" type="text" v-bind:name="info.name" v-model="info.value">
         </div>            
     </div>
 </template>
@@ -14,12 +14,14 @@ export default {
     components: {
         
     },
+    props: ['info'],
     data () {
         return {
-            name: 'Allergies:',
-            textContent: null
+            // track input value
+            value: this.info.value
         }
     }
+    
 }
 </script>
 

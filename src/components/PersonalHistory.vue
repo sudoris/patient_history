@@ -14,16 +14,22 @@
             </select>
 
             <br>
-            <br>
-
+            <br>            
             
-
-            <text-input></text-input>
+            
+            <div v-for="(field, key) in requiredFields" :key="key"> 
+                    <!-- track current key so it can be used to get corresponding value from patient record                -->
+                    {{ updateCurrentKey(key) }} 
+                    <!-- dyanamically render input fields according to component name and pass object containing
+                    the values of the label, name and value of input component as a prop                -->
+                    <component :is="field.componentName" v-bind:info="currentProperties" ></component>
+                
+            </div>            
 
         </div>    
 
             
-        
+
     </div>
     
 </template>
@@ -37,13 +43,48 @@ export default {
         TextInput           
     },
     data() {
-        return {
-          title: 'Patient History'
+        return {          
+          title: 'Personal History',
+          // track value of key for each iteration through requiredFields
+          currentKey: null,
+          // fake data to use as form schema
+          requiredFields: {
+              name: {
+                label: 'Name:',
+                componentName: 'TextInput'
+              },
+              gender: {
+                  label: 'Gender:',
+                  componentName: 'TextInput'
+              },
+              department: {
+                  label: 'Department',
+                  componentName: 'TextInput'
+              }
+          },
+          // fake patient data
+          patient_record: {
+              name: 'David',
+              gender: 'Male',
+              department: 'orthopedic'
+          }
         }
     },
     methods: {        
-        LoadForm() {
-            console.log('button clicked')   
+        updateCurrentKey(key) {
+            this.currentKey = key
+        }
+    },
+    computed: {
+        // returns object to pass as a prop to dynamic input components 
+        currentProperties() {
+            var currentKeyName = this.currentKey
+            return {                
+                    label: this.requiredFields[currentKeyName].label,
+                    name: this.currentKey,
+                    value: this.patient_record[currentKeyName]
+                
+            }
         }
     }
 }
